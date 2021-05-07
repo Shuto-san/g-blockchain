@@ -55,3 +55,7 @@ func hash(timestamp int64, lastHash string, data string) string {
 	sum := sha256.Sum256([]byte(blockString))
 	return fmt.Sprintf("%x", sum)
 }
+
+func blockHash(block *Block) string {
+	return hash(block.timestamp, block.lastHash, block.data)
+}
