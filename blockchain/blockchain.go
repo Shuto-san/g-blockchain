@@ -9,7 +9,7 @@ import (
 Blockchain is a chain of Blocks
 */
 type Blockchain struct {
-	chain []*Block
+	Chain []*Block
 }
 
 /*
@@ -20,13 +20,13 @@ func NewBlockchain() *Blockchain {
 	block := genesis()
 	chain = append(chain, block)
 	return &Blockchain{
-		chain: chain,
+		Chain: chain,
 	}
 }
 
-func (blockchain *Blockchain) addBlock(data string) *Block {
-	block := mineBlock(blockchain.chain[len(blockchain.chain)-1], data)
-	blockchain.chain = append(blockchain.chain, block)
+func (blockchain *Blockchain) AddBlock(data string) *Block {
+	block := mineBlock(blockchain.Chain[len(blockchain.Chain)-1], data)
+	blockchain.Chain = append(blockchain.Chain, block)
 
 	return block
 }
@@ -40,7 +40,7 @@ func isValidChain(chain []*Block) bool {
 		block := chain[i]
 		lastBlock := chain[i-1]
 
-		if block.lastHash != lastBlock.hash || block.hash != blockHash(block) {
+		if block.LastHash != lastBlock.Hash || block.Hash != blockHash(block) {
 			return false
 		}
 	}
@@ -48,7 +48,7 @@ func isValidChain(chain []*Block) bool {
 }
 
 func (blockchain *Blockchain) replaceChain(newChain []*Block) {
-	if len(newChain) <= len(blockchain.chain) {
+	if len(newChain) <= len(blockchain.Chain) {
 		log.Println("Received chain is not longer than the current chain.")
 		return
 	} else if !isValidChain(newChain) {
@@ -57,5 +57,5 @@ func (blockchain *Blockchain) replaceChain(newChain []*Block) {
 	}
 
 	log.Println("Replacing blockchain with the new chain.")
-	blockchain.chain = newChain
+	blockchain.Chain = newChain
 }
