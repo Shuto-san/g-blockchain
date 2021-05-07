@@ -11,10 +11,10 @@ import (
 Block is a block including timestamp, last hash, hash, data
 */
 type Block struct {
-	timestamp int64
-	lastHash  string
-	hash      string
-	data      string
+	Timestamp int64  `json:"timestamp"`
+	LastHash  string `json:"last_hash"`
+	Hash      string `json:"hash"`
+	Data      string `json:"data"`
 }
 
 /*
@@ -22,19 +22,19 @@ NewBlock is create new block instance
 */
 func NewBlock(timestamp int64, lastHash string, hash string, data string) *Block {
 	return &Block{
-		timestamp: timestamp,
-		lastHash:  lastHash,
-		hash:      hash,
-		data:      data,
+		Timestamp: timestamp,
+		LastHash:  lastHash,
+		Hash:      hash,
+		Data:      data,
 	}
 }
 
 func (block *Block) toString() string {
 	return "block ---\n" +
-		"Timestamp : " + strconv.FormatInt(block.timestamp, 10) + "\n" +
-		"Last Hash : " + string([]rune(block.lastHash)[:10]) + "\n" +
-		"Hash      : " + string([]rune(block.hash)[:10]) + "\n" +
-		"Data      : " + block.data + "\n"
+		"Timestamp : " + strconv.FormatInt(block.Timestamp, 10) + "\n" +
+		"Last Hash : " + string([]rune(block.LastHash)[:10]) + "\n" +
+		"Hash      : " + string([]rune(block.Hash)[:10]) + "\n" +
+		"Data      : " + block.Data + "\n"
 }
 
 func genesis() *Block {
@@ -44,7 +44,7 @@ func genesis() *Block {
 
 func mineBlock(lastBlock *Block, data string) *Block {
 	timestamp := time.Now().Unix()
-	lastHash := lastBlock.hash
+	lastHash := lastBlock.Hash
 	hash := hash(timestamp, lastHash, data)
 	block := NewBlock(timestamp, lastHash, hash, data)
 	return block
@@ -57,5 +57,5 @@ func hash(timestamp int64, lastHash string, data string) string {
 }
 
 func blockHash(block *Block) string {
-	return hash(block.timestamp, block.lastHash, block.data)
+	return hash(block.Timestamp, block.LastHash, block.Data)
 }

@@ -8,7 +8,7 @@ import (
 func TestBlockchain(t *testing.T) {
 	t.Run("start with genesis block", func(t *testing.T) {
 		bc := NewBlockchain()
-		got := bc.chain[0]
+		got := bc.Chain[0]
 		expected := genesis()
 
 		if !reflect.DeepEqual(got, expected) {
@@ -19,37 +19,37 @@ func TestBlockchain(t *testing.T) {
 	t.Run("adds a new block", func(t *testing.T) {
 		bc := NewBlockchain()
 		data := "foo"
-		bc.addBlock(data)
+		bc.AddBlock(data)
 
-		if bc.chain[len(bc.chain)-1].data != data {
-			t.Errorf("got:%s, expected:%s", bc.chain[len(bc.chain)-1].data, data)
+		if bc.Chain[len(bc.Chain)-1].Data != data {
+			t.Errorf("got:%s, expected:%s", bc.Chain[len(bc.Chain)-1].Data, data)
 		}
 	})
 
 	t.Run("validates a valid chain", func(t *testing.T) {
 		bc2 := NewBlockchain()
-		bc2.addBlock("foo")
+		bc2.AddBlock("foo")
 
-		if isValidChain(bc2.chain) == false {
+		if isValidChain(bc2.Chain) == false {
 			t.Errorf("chain is invalid")
 		}
 	})
 
 	t.Run("invalidates a chain with a corrupt genesis block", func(t *testing.T) {
 		bc2 := NewBlockchain()
-		bc2.chain[0].data = "Bad data"
+		bc2.Chain[0].Data = "Bad data"
 
-		if isValidChain(bc2.chain) != false {
+		if isValidChain(bc2.Chain) != false {
 			t.Errorf("not working chain validation")
 		}
 	})
 
 	t.Run("invalidates a corrupt chain", func(t *testing.T) {
 		bc2 := NewBlockchain()
-		bc2.addBlock("foo")
-		bc2.chain[1].data = "Not foo"
+		bc2.AddBlock("foo")
+		bc2.Chain[1].Data = "Not foo"
 
-		if isValidChain(bc2.chain) == true {
+		if isValidChain(bc2.Chain) == true {
 			t.Errorf("not working chain validation")
 		}
 	})
@@ -57,22 +57,22 @@ func TestBlockchain(t *testing.T) {
 	t.Run("replaces the chain with a valid chain", func(t *testing.T) {
 		bc := NewBlockchain()
 		bc2 := NewBlockchain()
-		bc2.addBlock("goo")
-		bc.replaceChain(bc2.chain)
+		bc2.AddBlock("goo")
+		bc.replaceChain(bc2.Chain)
 
-		if !reflect.DeepEqual(bc.chain, bc2.chain) {
-			t.Errorf("got:%v, expected:%v", bc.chain, bc2.chain)
+		if !reflect.DeepEqual(bc.Chain, bc2.Chain) {
+			t.Errorf("got:%v, expected:%v", bc.Chain, bc2.Chain)
 		}
 	})
 
 	t.Run("does not replace the chain with one of less than or equal to length", func(t *testing.T) {
 		bc := NewBlockchain()
 		bc2 := NewBlockchain()
-		bc.addBlock("foo")
-		bc.replaceChain(bc2.chain)
+		bc.AddBlock("foo")
+		bc.replaceChain(bc2.Chain)
 
-		if reflect.DeepEqual(bc.chain, bc2.chain) {
-			t.Errorf("got:%v, expected:%v", bc.chain, bc2.chain)
+		if reflect.DeepEqual(bc.Chain, bc2.Chain) {
+			t.Errorf("got:%v, expected:%v", bc.Chain, bc2.Chain)
 		}
 	})
 
